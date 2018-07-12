@@ -1,4 +1,4 @@
-import math
+import cmath
 import scipy
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,10 +23,10 @@ def list_of_similar(data, n, m):
             matrixj = data[j][:3, :3]
             biasj = data[j][:, 3]
             if np.linalg.norm(biasi - biasj) < n \
-                and math.acos(np.dot(np.dot(matrixi, rotation_vector),
-                              np.dot(matrixj, rotation_vector)) /
-                              (np.linalg.norm(np.dot(matrixi, rotation_vector)) *
-                              np.linalg.norm(np.dot(matrixj, rotation_vector)))) < m:
+                and cmath.acos(np.dot(np.dot(matrixi, rotation_vector),
+                               np.dot(matrixj, rotation_vector)) /
+                               (np.linalg.norm(np.dot(matrixi, rotation_vector)) *
+                               np.linalg.norm(np.dot(matrixj, rotation_vector)))) < m:
                 similar.append((i, j))
     return similar
 
