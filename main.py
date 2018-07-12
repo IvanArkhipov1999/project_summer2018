@@ -1,7 +1,8 @@
-import numpy as np
-import math 
-import matplotlib.pyplot as plt
+import math
 import scipy
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 def transform_12x1_to_3x4(data):
     transformed_data = []
@@ -10,8 +11,9 @@ def transform_12x1_to_3x4(data):
         transformed_data.append(i.reshape(3, 4))
     return transformed_data
 
-def list_of_similars(data, n, m):
-    similars = []
+
+def list_of_similar(data, n, m):
+    similar = []
 
     for i in range(len(data)):
         for j in range(i, len(data)):
@@ -21,13 +23,20 @@ def list_of_similars(data, n, m):
             matrixj = data[j][:3, :3]
             biasj = data[j][:, 3]
             if np.linalg.norm(biasi - biasj) < n \
-                    and math.acos(np.dot(np.dot(matrixi, rotation_vector), np.dot(matrixj, rotation_vector)) / \
-                    (np.linalg.norm(np.dot(matrixi, rotation_vector)) * \
-                     np.linalg.norm(np.dot(matrixj, rotation_vector)))) < m:
-                similars.append((i, j))
-    return similars
+                and math.acos(np.dot(np.dot(matrixi, rotation_vector),
+                              np.dot(matrixj, rotation_vector)) /
+                              (np.linalg.norm(np.dot(matrixi, rotation_vector)) *
+                              np.linalg.norm(np.dot(matrixj, rotation_vector)))) < m:
+                similar.append((i, j))
+    return similar
 
-#alg_result - list of (distance, picture1, picture2)
+
+def visualisation_roc(roc_x, roc_y):
+    plt.plot(roc_x, roc_y)
+    plt.show()
+
+
+# alg_result - list of (distance, picture1, picture2)
 def evaluation(alg_result, true_result):
     roc_x = []
     roc_y = []
@@ -44,8 +53,8 @@ def evaluation(alg_result, true_result):
             TP = TP + 1
         roc_x.append(FP / float(N))
         roc_y.append(TP / float(P))
-    plt.plot(roc_x, roc_y)
-    plt.show()
+    visualisation_roc(roc_x, roc_y)
     return scipy.trapz(roc_y, roc_x)
 
-data = np.loadtxt("00.txt", dtype=np.float)
+
+dataset = np.loadtxt("00.txt", dtype=np.float)
