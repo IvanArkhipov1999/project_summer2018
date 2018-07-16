@@ -57,4 +57,22 @@ def evaluation(alg_result, true_result):
     return scipy.trapz(roc_y, roc_x)
 
 
+# attempt to make new algorithm
+def new_evaluation(alg_result, true_result):
+    roc_x = []
+    roc_y = []
+    alg_result_reshaped = np.reshape(alg_result, alg_result.shape[0] * alg_result.shape[0]).tolist()
+    true_result_reshaped = np.reshape(true_result, true_result.shape[0] * true_result.shape[0]).tolist()
+    N = true_result_reshaped.count(0)
+    P = true_result_reshaped.count(1)
+    a = zip(alg_result_reshaped, true_result_reshaped)
+
+    a.sort(key=lambda item: item[0])
+    a = np.cumsum(np.asarray(a))
+    for i in range(a.shape[0]):
+        roc_x.append((i - a[i][1]) / float(N))
+        roc_y.append(a[i][1] / float(P))
+    visualisation_roc(roc_x, roc_y)
+
+
 dataset = np.loadtxt("00.txt", dtype=np.float)
