@@ -1,5 +1,4 @@
 import cmath
-import scipy
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -13,7 +12,7 @@ def transform_12x1_to_3x4(data):
 
 
 def list_of_similar(data, n, m):
-    similar = []
+    similar = np.zeros((len(data), len(data)))
 
     for i in range(len(data)):
         for j in range(i, len(data)):
@@ -27,7 +26,7 @@ def list_of_similar(data, n, m):
                                np.dot(matrixj, rotation_vector)) /
                                (np.linalg.norm(np.dot(matrixi, rotation_vector)) *
                                np.linalg.norm(np.dot(matrixj, rotation_vector)))) < m:
-                similar.append((i, j))
+                similar[i][j] = 1
     return similar
 
 
@@ -36,42 +35,20 @@ def visualisation_roc(roc_x, roc_y):
     plt.show()
 
 
-# alg_result - list of (distance, picture1, picture2)
 def evaluation(alg_result, true_result):
-    roc_x = []
-    roc_y = []
-    FP = 0
-    TP = 0
-    P = len(true_result)
-    N = len(alg_result) - P
-
-    alg_result.sort(key=lambda item: item[0])
-    for i in alg_result:
-        if true_result.count((i[1], i[2])) == 0:
-            FP = FP + 1
-        else:
-            TP = TP + 1
-        roc_x.append(FP / float(N))
-        roc_y.append(TP / float(P))
-    visualisation_roc(roc_x, roc_y)
-    return scipy.trapz(roc_y, roc_x)
-
-
-# attempt to make new algorithm
-def new_evaluation(alg_result, true_result):
-    roc_x = []
-    roc_y = []
-    alg_result_reshaped = np.reshape(alg_result, alg_result.shape[0] * alg_result.shape[0]).tolist()
-    true_result_reshaped = np.reshape(true_result, true_result.shape[0] * true_result.shape[0]).tolist()
-    N = true_result_reshaped.count(0)
-    P = true_result_reshaped.count(1)
-    a = zip(alg_result_reshaped, true_result_reshaped)
-
-    a.sort(key=lambda item: item[0])
-    a = np.cumsum(np.asarray(a))
-    for i in range(a.shape[0]):
-        roc_x.append((i - a[i][1]) / float(N))
-        roc_y.append(a[i][1] / float(P))
+    alg_result_reshaped = np.reshape(alg_result,
+                                     (1, alg_result.shape[0] * alg_result.shape[0]))
+    true_result_reshaped = np.reshape(true_result,
+                                      (1, true_result.shape[0] * true_result.shape[0]))
+    result = np.reshape(np.dstack([alg_result_reshaped, true_result_reshaped]),
+                        (alg_result.size, 2))
+    result = np.asarray(sorted(result, key=lambda item: item[0]))
+    P = np.sum(true_result)
+    N = true_result.size - P
+    a = np.cumsum(result[:, 1])
+    b = np.arange(alg_result.size) + 1
+    roc_x = (b - a) / float(N)
+    roc_y = a / float(N)
     visualisation_roc(roc_x, roc_y)
 
 
