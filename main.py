@@ -50,6 +50,7 @@ def evaluation(alg_result, true_result):
     roc_x = (b - a) / float(N)
     roc_y = a / float(N)
     visualisation_roc(roc_x, roc_y)
+    return np.sum(np.diff(np.append(roc_x, 1)) * roc_y)
 
 
 dataset = np.loadtxt("00.txt", dtype=np.float)
