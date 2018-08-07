@@ -52,4 +52,3 @@ def evaluation(alg_result, true_result):
     return np.sum(np.diff(np.append(roc_x, 1)) * roc_y)
 
 
-dataset = np.loadtxt("00.txt", dtype=np.float)

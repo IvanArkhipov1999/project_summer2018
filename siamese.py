@@ -17,9 +17,9 @@ class Siamese:
 
     def network(self, x):
         net = x
-        net = tflearn.fully_connected(net, 32)
-        net = tflearn.fully_connected(net, 32)
-        net = tflearn.fully_connected(net, 2)
+        net = tflearn.fully_connected(net, 32, activation='relu')
+        net = tflearn.fully_connected(net, 32, activation='relu')
+        net = tflearn.fully_connected(net, 2, activation='relu')
         return net
 
     def loss(self):
