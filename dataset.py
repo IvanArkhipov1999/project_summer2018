@@ -21,12 +21,12 @@ class Dataset:
         for i in range(size_of_batch):
             numbers1.append(random.randint(0, len(list_of_pictures)))
             pic = Image.open(list_of_pictures[numbers1[len(numbers1) - 1]])
-            x1.append(np.array(pic.getdata()).reshape(pic.size[0], pic.size[1], 3))
-            
+            x1.append(np.array(pic.getdata()))
+
         for i in range(size_of_batch):
             numbers2.append(random.randint(0, len(list_of_pictures)))
             pic = Image.open(list_of_pictures[numbers1[len(numbers2) - 1]])
-            x2.append(np.array(pic.getdata()).reshape(pic.size[0], pic.size[1], 3))
+            x2.append(np.array(pic.getdata()))
 
         for i in numbers1:
             for j in numbers2:
@@ -48,14 +48,24 @@ class Dataset:
         for i in range(size_of_batch):
             numbers1.append(random.randint(0, len(list_of_pictures)))
             pic = Image.open(list_of_pictures[numbers1[len(numbers1) - 1]])
+            pic_array = np.array(pic.getdata())
             pic_rotated = pic.rotate(random.randint(0, 360))
-            x1.append(np.array(pic_rotated.getdata()).reshape(pic_rotated.size[0], pic_rotated.size[1], 3))
+            pic_rotated_array = np.array(pic_rotated.getdata())
+            for i in range(pic_rotated_array.shape[0]):
+                if pic_rotated_array[i] == 0:
+                    pic_rotated_array[i] = pic_array[i]
+            x1.append(pic_rotated_array)
 
         for i in range(size_of_batch):
             numbers2.append(random.randint(0, len(list_of_pictures)))
             pic = Image.open(list_of_pictures[numbers2[len(numbers2) - 1]])
+            pic_array = np.array(pic.getdata())
             pic_rotated = pic.rotate(random.randint(0, 360))
-            x2.append(np.array(pic_rotated.getdata()).reshape(pic_rotated.size[0], pic_rotated.size[1], 3))
+            pic_rotated_array = np.array(pic_rotated.getdata())
+            for i in range(pic_rotated_array.shape[0]):
+                if pic_rotated_array[i] == 0:
+                    pic_rotated_array[i] = pic_array[i]
+            x2.append(pic_rotated_array)
 
         for i in numbers1:
             for j in numbers2:
@@ -78,13 +88,13 @@ class Dataset:
         for i in range(rand, rand + size_of_batch):
             numbers1.append(i)
             pic = Image.open(list_of_pictures[numbers1[len(numbers1) - 1]])
-            x1.append(np.array(pic.getdata()).reshape(pic.size[0], pic.size[1], 3))
+            x1.append(np.array(pic.getdata()))
 
         rand = random.randint(0, len(list_of_pictures) - size_of_batch)
         for i in range(rand, rand + size_of_batch):
             numbers2.append(i)
             pic = Image.open(list_of_pictures[numbers2[len(numbers2) - 1]])
-            x2.append(np.array(pic.getdata()).reshape(pic.size[0], pic.size[1], 3))
+            x2.append(np.array(pic.getdata()))
 
         for i in numbers1:
             for j in numbers2:
