@@ -14,17 +14,17 @@ class Dataset:
         numbers1 = []
         numbers2 = []
 
-        list_of_pictures = glob.glob(path_pictures)
+        list_of_pictures = glob.glob(path_pictures + "/*.png")
         matrix_of_similar = truth_roc.matrix_of_similar(
             truth_roc.transform_12x1_to_3x4(np.loadtxt(path_poses_file)), 1, 1)
 
         for i in range(size_of_batch):
-            numbers1.append(random.randint(0, len(list_of_pictures)))
+            numbers1.append(random.randint(0, len(list_of_pictures) - 1))
             pic = Image.open(list_of_pictures[numbers1[len(numbers1) - 1]])
             x1.append(np.array(pic.getdata()))
 
         for i in range(size_of_batch):
-            numbers2.append(random.randint(0, len(list_of_pictures)))
+            numbers2.append(random.randint(0, len(list_of_pictures) - 1))
             pic = Image.open(list_of_pictures[numbers1[len(numbers2) - 1]])
             x2.append(np.array(pic.getdata()))
 
@@ -41,12 +41,12 @@ class Dataset:
         numbers1 = []
         numbers2 = []
 
-        list_of_pictures = glob.glob(path_pictures)
+        list_of_pictures = glob.glob(path_pictures + "/*.png")
         matrix_of_similar = truth_roc.matrix_of_similar(
             truth_roc.transform_12x1_to_3x4(np.loadtxt(path_poses_file)), 1, 1)
 
         for i in range(size_of_batch):
-            numbers1.append(random.randint(0, len(list_of_pictures)))
+            numbers1.append(random.randint(0, len(list_of_pictures) - 1))
             pic = Image.open(list_of_pictures[numbers1[len(numbers1) - 1]])
             pic_array = np.array(pic.getdata())
             pic_rotated = pic.rotate(random.randint(0, 360))
@@ -57,7 +57,7 @@ class Dataset:
             x1.append(pic_rotated_array)
 
         for i in range(size_of_batch):
-            numbers2.append(random.randint(0, len(list_of_pictures)))
+            numbers2.append(random.randint(0, len(list_of_pictures) - 1))
             pic = Image.open(list_of_pictures[numbers2[len(numbers2) - 1]])
             pic_array = np.array(pic.getdata())
             pic_rotated = pic.rotate(random.randint(0, 360))
@@ -80,7 +80,7 @@ class Dataset:
         numbers1 = []
         numbers2 = []
 
-        list_of_pictures = glob.glob(path_pictures)
+        list_of_pictures = glob.glob(path_pictures + "/*.png")
         matrix_of_similar = truth_roc.matrix_of_similar(
             truth_roc.transform_12x1_to_3x4(np.loadtxt(path_poses_file)), 1, 1)
         rand = random.randint(0, len(list_of_pictures) - size_of_batch)

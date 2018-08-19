@@ -8,19 +8,27 @@ class Siamese:
         self.x1 = tflearn.input_data([None, 466616])
         self.x2 = tflearn.input_data([None, 466616])
 
-        with tf.variable_scope("siamese") as scope:
-            self.network1 = self.network(self.x1)
-            scope.reuse_variables()
-            self.network2 = self.network(self.x2)
+
+        self.network1 = self.network1(self.x1)
+        self.network2 = self.network2(self.x2)
 
         self.y_ = tf.placeholder(tf.float32, [None])
 
-    def network(self, x):
-        net = x
-        net = tflearn.fully_connected(net, 32, activation='relu')
-        net = tflearn.fully_connected(net, 32, activation='relu')
-        net = tflearn.fully_connected(net, 2, activation='relu')
-        return net
+    def network1(self, x):
+        with tf.name_scope('siamese_net1'):
+            net = x
+            net = tflearn.fully_connected(net, 32, activation='relu')
+            net = tflearn.fully_connected(net, 32, activation='relu')
+            net = tflearn.fully_connected(net, 2, activation='relu')
+            return net
+
+    def network2(self, x):
+        with tf.name_scope('siamese_net2'):
+            net = x
+            net = tflearn.fully_connected(net, 32, activation='relu')
+            net = tflearn.fully_connected(net, 32, activation='relu')
+            net = tflearn.fully_connected(net, 2, activation='relu')
+            return net
 
     def loss(self):
         margin = 8.0
