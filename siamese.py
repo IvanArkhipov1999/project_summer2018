@@ -1,34 +1,36 @@
 import tensorflow as tf
-import tflearn
 
 
 class Siamese:
 
     def __init__(self):
-        self.x1 = tflearn.input_data([None, 466616])
-        self.x2 = tflearn.input_data([None, 466616])
+        self.x1 = tf.placeholder([None, 466616])
+        self.x2 = tf.placeholder([None, 466616])
 
 
-        self.network1 = self.network1(self.x1)
-        self.network2 = self.network2(self.x2)
+        with tf.variable_scope("siamese") as scope:
+            self.network1 = self.network(self.x1)
+            scope.reuse_variables()
+            self.network2 = self.network(self.x2)
 
         self.y_ = tf.placeholder(tf.float32, [None])
 
-    def network1(self, x):
-        with tf.name_scope('siamese_net1'):
-            net = x
-            net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 2, activation='relu')
-            return net
+    def network(self, x):
+        fc1 = self.fc_layer(x, 1024, "fc1")
+        ac1 = tf.nn.relu(fc1)
+        fc2 = self.fc_layer(ac1, 1024, "fc2")
+        ac2 = tf.nn.relu(fc2)
+        fc3 = self.fc_layer(ac2, 2, "fc3")
+        return fc3
 
-    def network2(self, x):
-        with tf.name_scope('siamese_net2'):
-            net = x
-            net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 2, activation='relu')
-            return net
+    def fc_layer(self, bottom, n_weight, name):
+        assert len(bottom.get_shape()) == 2
+        n_prev_weight = bottom.get_shape()[1]
+        initer = tf.truncated_normal_initializer(stddev=0.01)
+        W = tf.get_variable(name+'W', dtype=tf.float32, shape=[n_prev_weight, n_weight], initializer=initer)
+        b = tf.get_variable(name+'b', dtype=tf.float32, initializer=tf.constant(0.01, shape=[n_weight], dtype=tf.float32))
+        fc = tf.nn.bias_add(tf.matmul(bottom, W), b)
+        return fc
 
     def loss(self):
         margin = 8.0
