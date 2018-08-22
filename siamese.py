@@ -19,7 +19,7 @@ class Siamese:
             net = x
             net = tflearn.fully_connected(net, 32, activation='relu')
             net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 2, activation='relu')
+            net = tflearn.fully_connected(net, 1, activation='relu')
             return net
 
     def network2(self, x):
@@ -27,7 +27,7 @@ class Siamese:
             net = x
             net = tflearn.fully_connected(net, 32, activation='relu')
             net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 2, activation='relu')
+            net = tflearn.fully_connected(net, 1, activation='relu')
             return net
 
     def loss(self):
@@ -39,4 +39,5 @@ class Siamese:
         losses = tf.add(tf.multiply(tf.subtract(1.0, y), tf.pow(d, 2)),
                         tf.multiply(y, tf.pow(tf.maximum(0.0, tf.subtract(m, d)), 2)))
         loss = tf.reduce_mean(losses)
+        loss = tf.reshape(loss, [-1])
         return loss
