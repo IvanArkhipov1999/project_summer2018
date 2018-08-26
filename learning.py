@@ -4,9 +4,6 @@ import siamese
 import dataset
 
 data = dataset.Dataset()
-# x1, x2, y = data.random("C:/Users/Мой Господин/PycharmProjects/practice_task1/data_odometry_gray/dataset/sequences/00/image_0",
-#                          "C:/Users/Мой Господин/PycharmProjects/practice_task1/00.txt", 100)
-# print(x1[0].shape[0])
 sess = tf.InteractiveSession()
 network = siamese.Siamese()
 train_step = tf.train.GradientDescentOptimizer(0.01).minimize(network.loss())
