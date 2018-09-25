@@ -5,8 +5,8 @@ import tflearn
 class Siamese:
 
     def __init__(self):
-        self.x1 = tflearn.input_data([None, 466616])
-        self.x2 = tflearn.input_data([None, 466616])
+        self.x1 = tflearn.input_data([None, 1241, 376, 1])
+        self.x2 = tflearn.input_data([None, 1241, 376, 1])
 
 
         self.network1 = self.network1(self.x1)
@@ -17,17 +17,19 @@ class Siamese:
     def network1(self, x):
         with tf.name_scope('siamese_net1'):
             net = x
+            net = tflearn.conv_2d(net, 64, 3, activation='relu')
+            net = tflearn.max_pool_2d(net, 2)
             net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 1, activation='relu')
+            net = tflearn.fully_connected(net, 2, activation='relu')
             return net
 
     def network2(self, x):
         with tf.name_scope('siamese_net2'):
             net = x
+            net = tflearn.conv_2d(net, 64, 3, activation='relu')
+            net = tflearn.max_pool_2d(net, 2)
             net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 32, activation='relu')
-            net = tflearn.fully_connected(net, 1, activation='relu')
+            net = tflearn.fully_connected(net, 2, activation='relu')
             return net
 
     def loss(self):

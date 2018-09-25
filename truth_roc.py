@@ -12,6 +12,12 @@ def transform_12x1_to_3x4(data):
 
 def matrix_of_similar(data, n, m):
     similar = np.zeros((len(data), len(data)))
+    x = []
+    y = []
+    for k in data:
+        x.append(k[0][3])
+        y.append(k[1][3])
+    plt.scatter(x, y, color='gray', s=10)
 
     for i in range(len(data)):
         for j in range(i, len(data)):
@@ -50,5 +56,8 @@ def evaluation(alg_result, true_result):
     roc_y = a / float(N)
     visualisation_roc(roc_x, roc_y)
     return np.sum(np.diff(np.append(roc_x, 1)) * roc_y)
+
+
+
 
 

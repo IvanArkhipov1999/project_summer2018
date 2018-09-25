@@ -10,4 +10,4 @@ x1, x2, y = data.random("C:/Users/Мой Господин/PycharmProjects/practi
 network = siamese.Siamese()
 regression = tflearn.regression(network.loss(), optimizer='sgd', metric='accuracy', learning_rate=0.002)
 model = tflearn.DNN(regression)
-model.fit([x1, x2], y, batch_size=2)
+model.fit([x1, x2], y, batch_size=2, show_metric=True)

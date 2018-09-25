@@ -21,11 +21,11 @@ class Dataset:
         for i in range(size_of_batch):
             numbers1.append(random.randint(0, len(list_of_pictures) - 1))
             pic1 = Image.open(list_of_pictures[numbers1[len(numbers1) - 1]])
-            x1.append(np.array(pic1.getdata()))
+            x1.append(np.array(pic1.getdata()).reshape(pic1.size[0], pic1.size[1], 1))
 
             numbers2.append(random.randint(0, len(list_of_pictures) - 1))
             pic2 = Image.open(list_of_pictures[numbers1[len(numbers2) - 1]])
-            x2.append(np.array(pic2.getdata()))
+            x2.append(np.array(pic2.getdata()).reshape(pic2.size[0], pic2.size[1], 1))
 
         for i in numbers1:
             for j in numbers2:
